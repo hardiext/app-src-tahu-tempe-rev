@@ -33,7 +33,7 @@ migrate_working_dir/
 /build/
 /coverage/
 
-**/serviceAccountKey.json
+**/google-services.json
 **/google-services.json
 **/GoogleService-Info.plist
 
