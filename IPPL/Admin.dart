@@ -1,3 +1,5 @@
+import 'User.dart';
+import 'Laporan.dart';
 class Admin extends User {
 
 

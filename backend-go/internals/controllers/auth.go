@@ -91,6 +91,19 @@ func Login(c *gin.Context) {
 	email := token.Claims["email"].(string)
 	uid := token.UID
 
+	// role
+	var role string
+
+	err = config.DB.QueryRow(`
+		SELECT role
+		FROM users
+		WHERE firebase_uid = ?
+	`, uid).Scan(&role)
+
+	if err != nil {
+		role = "buyer"
+	}
+
 	// insert kalau belum ada
 	_, _ = config.DB.Exec(`
 		INSERT IGNORE INTO users (firebase_uid, email, role)
@@ -100,6 +113,7 @@ func Login(c *gin.Context) {
 	c.JSON(200, gin.H{
 		"uid":   uid,
 		"email": email,
+		"role":  role,
 	})
 }
 func LoginGoogle(c *gin.Context) {

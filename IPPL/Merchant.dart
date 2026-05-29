@@ -1,3 +1,5 @@
+import 'User.dart';
+import 'Pesanan.dart';
 class Merchant extends User {
   String namaToko;
 

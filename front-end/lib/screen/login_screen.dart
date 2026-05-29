@@ -3,6 +3,8 @@ import 'package:warungly/core/auth/auth_service.dart';
 import 'package:warungly/core/auth/google_service.dart';
 import 'package:warungly/screen/forget_password_screen.dart';
 import 'package:warungly/screen/register_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:warungly/screen/select_role_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -27,10 +29,24 @@ class _LoginScreenState extends State<LoginScreen> {
         emailController.text.trim(),
         passwordController.text.trim(),
       );
+      final prefs = await SharedPreferences.getInstance();
+
+      await prefs.setString(
+        "role",
+        res["role"] ?? "buyer",
+      );
+      print("LOGIN RESPONSE = $res");
       if (!mounted) return;
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(const SnackBar(content: Text("Login success")));
+      ).showSnackBar(const SnackBar(content: Text("Login success")
+      ));
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (_) => const SelectRoleScreen(),
+        ),
+      );
     } catch (e) {
       if (!mounted) return;
       String message = "Login gagal";

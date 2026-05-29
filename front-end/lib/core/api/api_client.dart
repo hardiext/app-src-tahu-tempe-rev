@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class ApiClient {
-  final String baseUrl = "http://10.190.5.251:8080/api";
+  final String baseUrl = "http://192.168.18.15:8080/api";
 
   Future<http.Response> post(
     String path,

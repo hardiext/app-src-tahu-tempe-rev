@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:warungly/screen/login_screen.dart';
 import '../core/auth/auth_state.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -16,8 +17,21 @@ class HomeScreen extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.logout),
-            onPressed: () {
-              Provider.of<AuthState>(context, listen: false).logout();
+            onPressed: () async {
+              await Provider.of<AuthState>(
+                context,
+                listen: false,
+              ).logout();
+
+              if (!context.mounted) return;
+
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const LoginScreen(),
+                ),
+                (route) => false,
+              );
             },
           )
         ],

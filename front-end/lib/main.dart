@@ -3,24 +3,21 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:warungly/firebase_options.dart';
 import 'core/auth/auth_state.dart';
-import 'screen/home_screen.dart';
 import 'screen/login_screen.dart';
 import 'screen/splash_page.dart';
-
-
-void main () async {
-   WidgetsFlutterBinding.ensureInitialized();
+import 'screen/select_role_screen.dart';
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
   runApp(
     ChangeNotifierProvider(
       create: (_) => AuthState()..init(),
       child: const MyApp(),
     ),
-    
-      
   );
 }
 
@@ -40,10 +37,10 @@ class MyApp extends StatelessWidget {
           }
 
           if (auth.isLoggedIn) {
-            return const HomeScreen();
+            return const SelectRoleScreen();
           }
 
-          return  LoginScreen();
+          return const LoginScreen();
         },
       ),
     );
