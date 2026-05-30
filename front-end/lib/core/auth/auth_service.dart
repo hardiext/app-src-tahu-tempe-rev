@@ -29,7 +29,7 @@ class AuthService {
       {
         "id_token": token,
         "name": username,
-        "role": "buyer",
+        "role": "",
       },
     );
 
@@ -74,6 +74,21 @@ class AuthService {
     if (res.statusCode != 200) {
       throw Exception(res.body);
     }
+
+    return jsonDecode(res.body);
+  }
+
+  Future<Map<String, dynamic>> selectRole(
+  String role,
+  String token,
+  ) async {
+    final res = await api.post(
+      "/user/select-role",
+      {
+        "role": role,
+      },
+      token: token,
+    );
 
     return jsonDecode(res.body);
   }

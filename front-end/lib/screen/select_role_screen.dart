@@ -1,9 +1,66 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
+
+import 'package:warungly/core/auth/auth_service.dart';
+import 'package:warungly/core/auth/auth_state.dart';
+
 import 'package:warungly/screen/admin_page.dart';
 import 'package:warungly/screen/home_screen.dart';
 
 class SelectRoleScreen extends StatelessWidget {
   const SelectRoleScreen({super.key});
+
+  Future<void> pilihRole(
+    BuildContext context,
+    String role,
+  ) async {
+    try {
+      final authService = AuthService();
+
+      final authState = Provider.of<AuthState>(
+        context,
+        listen: false,
+      );
+
+      final user = FirebaseAuth.instance.currentUser!;
+
+      final token = (await user.getIdToken())!;
+
+      await authService.selectRole(
+        role,
+        token,
+      );
+
+      await authState.setRole(role);
+
+      if (!context.mounted) return;
+
+      if (role == "admin") {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (_) => const AdminPage(),
+          ),
+        );
+      } else {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (_) => const HomeScreen(),
+          ),
+        );
+      }
+    } catch (e) {
+      if (!context.mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(e.toString()),
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,9 +78,7 @@ class SelectRoleScreen extends StatelessWidget {
               Icons.person_outline,
               size: 80,
             ),
-
             const SizedBox(height: 20),
-
             const Text(
               "Masuk Sebagai",
               style: TextStyle(
@@ -31,7 +86,6 @@ class SelectRoleScreen extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-
             const SizedBox(height: 40),
 
             SizedBox(
@@ -41,12 +95,7 @@ class SelectRoleScreen extends StatelessWidget {
                 icon: const Icon(Icons.shopping_cart),
                 label: const Text("Pembeli"),
                 onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => const HomeScreen(),
-                    ),
-                  );
+                  pilihRole(context, "buyer");
                 },
               ),
             ),
@@ -60,12 +109,7 @@ class SelectRoleScreen extends StatelessWidget {
                 icon: const Icon(Icons.store),
                 label: const Text("Penjual"),
                 onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => const AdminPage(),
-                    ),
-                  );
+                  pilihRole(context, "admin");
                 },
               ),
             ),

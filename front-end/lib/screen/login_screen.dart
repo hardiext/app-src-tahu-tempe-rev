@@ -5,6 +5,8 @@ import 'package:warungly/screen/forget_password_screen.dart';
 import 'package:warungly/screen/register_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:warungly/screen/select_role_screen.dart';
+import 'package:warungly/screen/admin_page.dart';
+import 'package:warungly/screen/home_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -41,12 +43,28 @@ class _LoginScreenState extends State<LoginScreen> {
         context,
       ).showSnackBar(const SnackBar(content: Text("Login success")
       ));
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (_) => const SelectRoleScreen(),
-        ),
-      );
+      if (res["role"] == "admin") {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (_) => const AdminPage(),
+          ),
+        );
+      } else if (res["role"] == "buyer") {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (_) => const HomeScreen(),
+          ),
+        );
+      } else {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (_) => const SelectRoleScreen(),
+          ),
+        );
+      }
     } catch (e) {
       if (!mounted) return;
       String message = "Login gagal";

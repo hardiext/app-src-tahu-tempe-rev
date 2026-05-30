@@ -34,3 +34,39 @@ func GetUser(c *gin.Context) {
 
 	c.JSON(http.StatusOK, user)
 }
+
+type SelectRoleRequest struct {
+	Role string `json:"role"`
+}
+
+func SelectRole(c *gin.Context) {
+
+	uid := c.GetString("uid")
+
+	var req SelectRoleRequest
+
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	_, err := config.DB.Exec(`
+		UPDATE users
+		SET role = ?
+		WHERE firebase_uid = ?
+	`, req.Role, uid)
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": "role updated",
+		"role":    req.Role,
+	})
+}

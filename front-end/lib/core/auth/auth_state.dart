@@ -58,6 +58,14 @@ class AuthState extends ChangeNotifier {
 
     notifyListeners();
   }
+  Future<void> setRole(String newRole) async {
+    role = newRole;
+
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString("role", newRole);
+
+    notifyListeners();
+  }
 
   Future logout() async {
     await FirebaseAuth.instance.signOut();

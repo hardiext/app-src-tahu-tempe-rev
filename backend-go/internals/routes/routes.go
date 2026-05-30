@@ -25,6 +25,7 @@ func SetupRoutes(r *gin.Engine) {
 	user.Use(middlewares.AuthMiddleware())
 	{
 		user.GET("/profile", controllers.GetUser)
+		user.POST("/select-role", controllers.SelectRole)
 	}
 
 	store := api.Group("/store")
