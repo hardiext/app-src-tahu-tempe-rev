@@ -74,7 +74,7 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
               Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF42B983).withOpacity(0.1),
+                  color: const Color(0xFF42B983).withValues(alpha: 0.1),
                   shape: BoxShape.circle,
                 ),
                 child: const Icon(

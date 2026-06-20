@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
           }
 
           if (auth.isLoggedIn) {
-            return const HomeScreen();
+            return HomeScreen(user: auth.user!);
           }
 
           return  LoginScreen();
